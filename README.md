@@ -38,7 +38,7 @@ Short human-generated text (```./data/human-input-small.txt```):
 
 - GPT-4o generated text ( ```./data/gpt4o-input.txt```):
 
-![](results/result_plot-gpt4o-input-small.png)
+![](results/result_plot-gpt4o-input.png)
 
 ## Evaluation Data
 
@@ -56,4 +56,6 @@ For instance, ```./data/gpt4o-input.txt```, indicates a text file written by the
 
 - [ ] ```davinci-002``` is one of the most expensive models, priced at 12$/ 1M input and output tokens.
 
-- [ ] ```python ./prototype.py ./data/gpt4o-input.txt``` yields a bug which needs to be fixed.
+- [ ] Frequencies shall be normalised over the length of the document
+
+- [ ] Output is not deterministic, can we make the Open AI API reproducible?

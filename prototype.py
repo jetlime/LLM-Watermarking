@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import matplotlib.pyplot as plt
 
 input_tokens = output_tokens = 0
-price_per_token = 0.000012
+price_per_token = 0.000012 # 12$/1M Input & Output Token for davinci-002
 
 encoder = tiktoken.encoding_for_model("text-davinci-002")
 
@@ -23,7 +23,6 @@ TOKEN_TO_CONSIDER = 7
 with open(FILE_NAME, "r") as file:
     lines = file.readlines()
     raw = "".join(lines)
-    number_char = len(raw)
 
 raw_tokens = encoder.encode(raw)
 
@@ -54,7 +53,6 @@ def iterative_word_predition(raw_tokens, encoder):
         output_tokens += 1
         logprobs = response.choices[0].logprobs.top_logprobs
         next_word_log_probs = logprobs[0]
-        # print(next_word_log_probs, len(next_word_log_probs))
         # iterate through the ordered list of the most probable next words
         index = 0
         found_token = False
@@ -82,11 +80,11 @@ x_labels = list(range(len(word_selection_distribution)))
 plt.bar(x_labels, word_selection_distribution, tick_label=x_labels)
 
 # Adding title and labels
-plt.xlabel("Index in the probability distribution of the word chosen by the Human")
+plt.xlabel("Index in the probability distribution of the LLM, of the word chosen by the Human")
 plt.ylabel("Occurance (#)")
 request_cost = (input_tokens + output_tokens) * price_per_token
 plt.title(
-    f"Total API cost U.S ${round(request_cost, 3)} for a document of {number_char} characters"
+    f"Total API cost U.S ${round(request_cost, 3)} for a document of {len(raw)} characters"
 )
 
 # Display the plot
