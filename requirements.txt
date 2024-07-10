@@ -1,0 +1,7 @@
+tiktoken
+openai
+python-dotenv
+matplotlib
+tqdm
+numpy
+seaborn

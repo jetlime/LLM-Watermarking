@@ -1,0 +1,1 @@
+The concept of Software Defined Networking (SDN) has been successfully applied to efficiently configure and manage network infrastructure, e.g. in the context of data centres or WANs, and increasingly for ubiquitous communication. In this paper, we explore the idea of pushing SDN to the end-host.
