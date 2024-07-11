@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 import matplotlib.pyplot as plt
 
 FILE_NAME = sys.argv[1]
-TOKEN_TO_CONSIDER = 7
+FREQUENCY_BINS = 7
+SEQUENCE_WINDOW_SIZE = 10
 MODEL_ID = "davinci-002"
 
 input_tokens = output_tokens = 0
@@ -33,13 +34,16 @@ client = OpenAI(api_key=GPT_API_KEY)
 
 
 # We only consider a probability distributions of 5 tokens, and we include a bin in case the token is not found
-word_selection_distribution = [0] * TOKEN_TO_CONSIDER
+word_selection_distribution = [0] * FREQUENCY_BINS
 
 
 def iterative_word_predition(raw_tokens, encoder):
     global input_tokens, output_tokens
     for i in tqdm(range(1, len(raw_tokens))):
-        previous_sequence = encoder.decode(raw_tokens[:i])
+        if SEQUENCE_WINDOW_SIZE <= len(raw_tokens[:i]):
+            previous_sequence = encoder.decode(raw_tokens[i-SEQUENCE_WINDOW_SIZE:i])
+        else:
+            previous_sequence = encoder.decode(raw_tokens[:i])
         next_token = raw_tokens[i]
         input_prompt = prompt_template(previous_sequence)
         input_tokens += len(encoder.encode(input_prompt))
@@ -49,7 +53,7 @@ def iterative_word_predition(raw_tokens, encoder):
             max_tokens=1,
             temperature=0.7,
             seed=1234,
-            logprobs=TOKEN_TO_CONSIDER,
+            logprobs=FREQUENCY_BINS,
         )
         output_tokens += 1
         logprobs = response.choices[0].logprobs.top_logprobs
