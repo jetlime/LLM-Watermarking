@@ -107,4 +107,9 @@ plt.title(
 )
 
 # Display the plot
-plt.savefig(f"./results/result_plot-{FILE_NAME.split('/')[-1].split('.')[0]}.png")
+plt.savefig(f"./results/plot_{FILE_NAME.split('/')[-1].split('.')[0].split('_')[0]}_{FILE_NAME.split('/')[-1].split('.')[0].split('_')[1]}.png")
+
+# Save distribution to file for further analysis
+with open(f"./results/result_{FILE_NAME.split('/')[-1].split('.')[0].split('_')[0]}_{FILE_NAME.split('/')[-1].split('.')[0].split('_')[1]}", "w") as f:
+    for s in word_selection_distribution:
+        f.write(str(s) +"\n")
