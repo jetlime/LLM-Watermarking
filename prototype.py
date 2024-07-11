@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import matplotlib.pyplot as plt
 
 input_tokens = output_tokens = 0
-price_per_token = 0.000012 # 12$/1M Input & Output Token for davinci-002
+price_per_token = {"davinci-002": (0.000002, 0.000002), "gpt-3.5-turbo-1106": (0.000001,0.000001),  "babbage-002": (0.0000004, 0.0000004), "gpt-4o": (0.000005, 0.000015), "gpt-4-turbo": (0.00001, 0.00003)} 
 
 encoder = tiktoken.encoding_for_model("text-davinci-002")
 
@@ -19,6 +19,7 @@ def prompt_template(sequence):
 
 FILE_NAME = sys.argv[1]
 TOKEN_TO_CONSIDER = 7
+MODEL_ID = "davinci-002"
 
 with open(FILE_NAME, "r") as file:
     lines = file.readlines()
@@ -44,10 +45,11 @@ def iterative_word_predition(raw_tokens, encoder):
         input_prompt = prompt_template(previous_sequence)
         input_tokens += len(encoder.encode(input_prompt))
         response = client.completions.create(
-            model="davinci-002",
+            model=MODEL_ID,
             prompt=input_prompt,
             max_tokens=1,
             temperature=0.7,
+            seed=1234,
             logprobs=TOKEN_TO_CONSIDER,
         )
         output_tokens += 1
@@ -82,7 +84,7 @@ plt.bar(x_labels, word_selection_distribution, tick_label=x_labels)
 # Adding title and labels
 plt.xlabel("Index in the probability distribution of the LLM, of the word chosen by the Human")
 plt.ylabel("Occurance (#)")
-request_cost = (input_tokens + output_tokens) * price_per_token
+request_cost = (input_tokens * price_per_token[MODEL_ID][0]) + (output_tokens * price_per_token[MODEL_ID][1])
 plt.title(
     f"Total API cost U.S ${round(request_cost, 3)} for a document of {len(raw)} characters"
 )
