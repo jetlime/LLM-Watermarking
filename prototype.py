@@ -13,7 +13,13 @@ SEQUENCE_WINDOW_SIZE = 10
 MODEL_ID = "davinci-002"
 
 input_tokens = output_tokens = 0
-price_per_token = {"davinci-002": (0.000002, 0.000002), "gpt-3.5-turbo-1106": (0.000001,0.000001),  "babbage-002": (0.0000004, 0.0000004), "gpt-4o": (0.000005, 0.000015), "gpt-4-turbo": (0.00001, 0.00003)} 
+price_per_token = {
+    "davinci-002": (0.000002, 0.000002),
+    "gpt-3.5-turbo-1106": (0.000001, 0.000001),
+    "babbage-002": (0.0000004, 0.0000004),
+    "gpt-4o": (0.000005, 0.000015),
+    "gpt-4-turbo": (0.00001, 0.00003),
+}
 encoder = tiktoken.encoding_for_model(MODEL_ID)
 
 
@@ -41,7 +47,7 @@ def iterative_word_predition(raw_tokens, encoder):
     global input_tokens, output_tokens
     for i in tqdm(range(1, len(raw_tokens))):
         if SEQUENCE_WINDOW_SIZE <= len(raw_tokens[:i]):
-            previous_sequence = encoder.decode(raw_tokens[i-SEQUENCE_WINDOW_SIZE:i])
+            previous_sequence = encoder.decode(raw_tokens[i - SEQUENCE_WINDOW_SIZE : i])
         else:
             previous_sequence = encoder.decode(raw_tokens[:i])
         next_token = raw_tokens[i]
@@ -79,17 +85,25 @@ iterative_word_predition(raw_tokens, encoder)
 print(word_selection_distribution)
 
 
+def normalize_list(data):
+    return [x / sum(data) for x in data]
+
+
 x_labels = list(range(len(word_selection_distribution)))
 
 # Plotting the histogram
-plt.bar(x_labels, word_selection_distribution, tick_label=x_labels)
+plt.bar(x_labels, normalize_list(word_selection_distribution), tick_label=x_labels)
 
 # Adding title and labels
-plt.xlabel("Index in the probability distribution of the LLM, of the word chosen by the Human")
-plt.ylabel("Occurance (#)")
-request_cost = (input_tokens * price_per_token[MODEL_ID][0]) + (output_tokens * price_per_token[MODEL_ID][1])
+plt.xlabel(
+    "Index in the probability distribution of the LLM, of the word chosen by the Human"
+)
+plt.ylabel("Distribution over 1")
+request_cost = (input_tokens * price_per_token[MODEL_ID][0]) + (
+    output_tokens * price_per_token[MODEL_ID][1]
+)
 plt.title(
-    f"Total API cost U.S ${round(request_cost, 3)} for a document of {len(raw)} characters"
+    f"Total API cost of U.S ${round(request_cost, 3)} ({output_tokens} API calls) for {len(raw)} characters"
 )
 
 # Display the plot
