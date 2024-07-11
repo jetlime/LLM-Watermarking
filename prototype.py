@@ -7,19 +7,18 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import matplotlib.pyplot as plt
 
+FILE_NAME = sys.argv[1]
+TOKEN_TO_CONSIDER = 7
+MODEL_ID = "davinci-002"
+
 input_tokens = output_tokens = 0
 price_per_token = {"davinci-002": (0.000002, 0.000002), "gpt-3.5-turbo-1106": (0.000001,0.000001),  "babbage-002": (0.0000004, 0.0000004), "gpt-4o": (0.000005, 0.000015), "gpt-4-turbo": (0.00001, 0.00003)} 
-
-encoder = tiktoken.encoding_for_model("text-davinci-002")
+encoder = tiktoken.encoding_for_model(MODEL_ID)
 
 
 def prompt_template(sequence):
     return f"Complete the sentence, provide only a single word as output: {sequence}"
 
-
-FILE_NAME = sys.argv[1]
-TOKEN_TO_CONSIDER = 7
-MODEL_ID = "davinci-002"
 
 with open(FILE_NAME, "r") as file:
     lines = file.readlines()

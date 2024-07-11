@@ -40,6 +40,10 @@ Short human-generated text (```./data/human-input-small.txt```):
 
 ![](results/result_plot-gpt4o-input.png)
 
+- Davinci-002 generated text ( ```./data/davinci-002-input.txt```):
+
+![](results/result_plot-davinci-002-input.png)
+
 ## Cost Analysis
 
 ![](cost-analysis/cost_per_char_inf_sequence_window.png)
@@ -54,12 +58,10 @@ For instance, ```./data/gpt4o-input.txt```, indicates a text file written by the
 
 ## Current Limitations to address
 
-- [ ]  The API endpoint I currently rely on, is not compatible with the newer instruction fine-tuned models (GPT 4 & 3.5).
+- [ ] The API endpoint I currently rely on, is not compatible with the newer instruction fine-tuned models (GPT 4 & 3.5).
 
 - [ ] I give the model the entire previously seen text, which can become very long after parsing a document. Based on the length of the input document, it results in an exponential token consummation, which will be very costly!
 
 - [ ] Currently, no obvious visual difference is observed between samples written by humans and LLMs. It may be due to the very small size of the log probability distribution returned by the ```davinci-002``` model (usually only 5).
-
-- [ ] ```davinci-002``` is one of the most expensive models, priced at 12$/ 1M input and output tokens.
 
 - [ ] Frequencies shall be normalised over the length of the document
