@@ -26,20 +26,7 @@ for file_name in file_names:
 print(distributions_human)
 print(distributions_llm)
 
-
-def compute_wasserstein_distances(distributions):
-    distances = []
-    pairs = list(itertools.combinations(range(len(distributions)), 2))
-    for pair in pairs:
-        dist1 = distributions[pair[0]]
-        dist2 = distributions[pair[1]]
-        distance = wasserstein_distance(dist1, dist2)
-        distances.append((pair, distance))
-    return distances
-
-distances = compute_wasserstein_distances(distributions_llm)
-
-
+# Do metric computation and plotting below
 # plt.figure(1)
 # plt.plot(xs[:, 0], xs[:, 1], '+b', label='Human Samples')
 # plt.plot(xt[:, 0], xt[:, 1], 'xr', label='LLM Samples')

@@ -22,28 +22,49 @@ pip install -r ./requirements.txt
 echo GPT_API_KEY="<OPENAI_API_KEY>" > .env
 ```
 
-3. Execute the program by defining the Text file you wish to evaluate
+3. Execute the program by defining the Text file you wish to evaluate and the model for which you want to compare the token selection distribution
 
 ```bash
-python prototype.py ./data/human-input-small.txt 
+python prototype.py ./data/human-input-small.txt "davinci-002"
 ```
 
 ## Examples
+
+### Using ```davinci-002```
+
 Short human-generated text (```./data/human-input-small.txt```):
 
-![](results/plot_human_input-small.png)
+![](results_davinci-002/plot_human_input-small.png)
 
 - Human generated text (```./data/human-input.txt```):
 
-![](results/plot_human_input.png)
+![](results_davinci-002/plot_human_input.png)
 
 - GPT-4o generated text ( ```./data/gpt4o-input.txt```):
 
-![](results/plot_gpt4o_input.png)
+![](results_davinci-002/plot_gpt4o_input.png)
 
 - Davinci-002 generated text ( ```./data/davinci-002-input.txt```):
 
-![](results/plot_davinci-002_input.png)
+![](results_davinci-002/plot_davinci-002_input.png)
+
+### Using ```gpt3.5-turbo-1106```
+
+Short human-generated text (```./data/human-input-small.txt```):
+
+![](results_davinci-002/plot_human_input-small.png)
+
+- Human generated text (```./data/human-input.txt```):
+
+![](results_davinci-002/plot_human_input.png)
+
+- GPT-4o generated text ( ```./data/gpt4o-input.txt```):
+
+![](results_davinci-002/plot_gpt4o_input.png)
+
+- Davinci-002 generated text ( ```./data/davinci-002-input.txt```):
+
+![](results_davinci-002/plot_davinci-002_input.png)
 
 ## Cost Analysis
 

@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 import matplotlib.pyplot as plt
 
 FILE_NAME = sys.argv[1]
-FREQUENCY_BINS = 7
+MODEL_ID = sys.argv[2]
+FREQUENCY_BINS = 21
 SEQUENCE_WINDOW_SIZE = 10
-MODEL_ID = "davinci-002"
 
 input_tokens = output_tokens = 0
 price_per_token = {
@@ -25,7 +25,6 @@ encoder = tiktoken.encoding_for_model(MODEL_ID)
 
 def prompt_template(sequence):
     return f"Complete the sentence, provide only a single word as output: {sequence}"
-
 
 with open(FILE_NAME, "r") as file:
     lines = file.readlines()
@@ -53,22 +52,41 @@ def iterative_word_predition(raw_tokens, encoder):
         next_token = raw_tokens[i]
         input_prompt = prompt_template(previous_sequence)
         input_tokens += len(encoder.encode(input_prompt))
-        response = client.completions.create(
-            model=MODEL_ID,
-            prompt=input_prompt,
-            max_tokens=1,
-            temperature=0.7,
-            seed=1234,
-            logprobs=FREQUENCY_BINS,
-        )
+        if MODEL_ID == "davinci-002":
+            response = client.completions.create(
+                model=MODEL_ID,
+                prompt=input_prompt,
+                max_tokens=1,
+                temperature=0.7,
+                seed=1234,
+                logprobs=FREQUENCY_BINS,
+            )
+            logprobs = response.choices[0].logprobs.top_logprobs
+            next_word_log_probs = logprobs[0]
+    
+        elif MODEL_ID == "gpt-3.5-turbo-1106":
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo-0125",
+                messages=[
+                    {"role": "system", "content": "Complete the following sentence using a single word."},
+                    {"role": "user", "content": "I am "},
+                ],
+                seed=1234,
+                n=1,
+                logprobs=True,
+                top_logprobs=20
+            )
+            next_word_log_probs = {}
+            for logprob in response.choices[0].logprobs.content[0].top_logprobs:
+                next_word_log_probs[logprob.token] = logprob.logprob
+
         output_tokens += 1
-        logprobs = response.choices[0].logprobs.top_logprobs
-        next_word_log_probs = logprobs[0]
         # iterate through the ordered list of the most probable next words
         index = 0
         found_token = False
         for next_word_candidate in next_word_log_probs:
             index += 1
+            print(encoder.decode([next_token]), next_word_candidate)
             if [next_token] == encoder.encode(
                 next_word_candidate, allowed_special={"<|endoftext|>"}
             ):
@@ -107,9 +125,9 @@ plt.title(
 )
 
 # Display the plot
-plt.savefig(f"./results/plot_{FILE_NAME.split('/')[-1].split('.')[0].split('_')[0]}_{FILE_NAME.split('/')[-1].split('.')[0].split('_')[1]}.png")
+plt.savefig(f"./results_{MODEL_ID}/plot_{FILE_NAME.split('/')[-1].split('.')[0].split('_')[0]}_{FILE_NAME.split('/')[-1].split('.')[0].split('_')[1]}.png")
 
 # Save distribution to file for further analysis
-with open(f"./results/result_{FILE_NAME.split('/')[-1].split('.')[0].split('_')[0]}_{FILE_NAME.split('/')[-1].split('.')[0].split('_')[1]}", "w") as f:
+with open(f"./results_{MODEL_ID}/result_{FILE_NAME.split('/')[-1].split('.')[0].split('_')[0]}_{FILE_NAME.split('/')[-1].split('.')[0].split('_')[1]}", "w") as f:
     for s in word_selection_distribution:
         f.write(str(s) +"\n")
