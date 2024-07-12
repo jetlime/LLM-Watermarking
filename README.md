@@ -50,21 +50,7 @@ Short human-generated text (```./data/human-input-small.txt```):
 
 ### Using ```gpt3.5-turbo-1106```
 
-Short human-generated text (```./data/human-input-small.txt```):
-
-![](results_davinci-002/plot_human_input-small.png)
-
-- Human generated text (```./data/human-input.txt```):
-
-![](results_davinci-002/plot_human_input.png)
-
-- GPT-4o generated text ( ```./data/gpt4o-input.txt```):
-
-![](results_davinci-002/plot_gpt4o_input.png)
-
-- Davinci-002 generated text ( ```./data/davinci-002-input.txt```):
-
-![](results_davinci-002/plot_davinci-002_input.png)
+TO BE IMPLEMENTED
 
 ## Cost Analysis
 
