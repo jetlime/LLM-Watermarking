@@ -3,11 +3,18 @@ from os import getenv
 from tqdm import tqdm
 from openai import OpenAI
 from dotenv import load_dotenv
-from utils import prompt_template, plot_results, parse_args, send_prompt_chat_completion, send_prompt_completion
+from utils import (
+    prompt_template,
+    plot_results,
+    parse_args,
+    send_prompt_chat_completion,
+    send_prompt_completion,
+)
 
 
 load_dotenv()
 GPT_API_KEY = getenv("GPT_API_KEY")
+
 
 def main():
     input_tokens = output_tokens = 0
@@ -31,19 +38,25 @@ def main():
     # specified Frequency Bins, and we include a bin in case the token is not found
     word_selection_distribution = [0] * config.frequency_bins
 
+    # For all tokens in the document
     for i in tqdm(range(1, len(raw_tokens))):
-        if config.context_window <= len(raw_tokens[:i]):
-            previous_sequence = encoder.decode(raw_tokens[i - config.context_window : i])
-        else:
-            previous_sequence = encoder.decode(raw_tokens[:i])
+        # Consider the series of tokens preceding the current token,
+        # being as long as the specified context window.
+        # THe begining of the document will not a shorter sequence of tokens
+        start_index = max(0, i - config.context_window)
+        previous_sequence = encoder.decode(raw_tokens[start_index:i])
+
         next_token = raw_tokens[i]
         input_prompt = prompt_template(previous_sequence)
         input_tokens += len(encoder.encode(input_prompt))
+
+        # Prompt changes based on Judge Model type (foundational or chat finetuned)
         if config.model_id in ["davinci-002", "babbage-002"]:
             next_word_log_probs = send_prompt_completion(client, config, input_prompt)
-
         elif config.model_id in ["gpt-3.5-turbo-1106"]:
-            next_word_log_probs = send_prompt_chat_completion(client, config, input_prompt)
+            next_word_log_probs = send_prompt_chat_completion(
+                client, config, input_prompt
+            )
 
         output_tokens += 1
         # iterate through the ordered list of the most probable next words

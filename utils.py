@@ -24,6 +24,7 @@ def send_prompt_completion(client, config, input_prompt):
     logprobs = response.choices[0].logprobs.top_logprobs
     return logprobs[0]
 
+
 # Prompt newer models, finetuned on chat instruction
 def send_prompt_chat_completion(client, config, input_prompt):
     response = client.chat.completions.create(
@@ -45,11 +46,14 @@ def send_prompt_chat_completion(client, config, input_prompt):
         next_word_log_probs[logprob.token] = logprob.logprob
     return next_word_log_probs
 
+
 def normalise_list(data):
     return [x / sum(data) for x in data]
 
+
 def prompt_template(sequence):
     return f"Complete the sentence, provide only a single word as output: {sequence}"
+
 
 def plot_results(word_selection_distribution, input_tokens, output_tokens, config, raw):
     x_labels = list(range(len(word_selection_distribution)))
@@ -83,6 +87,7 @@ def plot_results(word_selection_distribution, input_tokens, output_tokens, confi
         for s in word_selection_distribution:
             f.write(str(s) + "\n")
 
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Watermarking LLMs.")
     parser.add_argument(
@@ -93,7 +98,7 @@ def parse_args():
         metavar="open_ai_model_id",
         type=str,
         choices=["davinci-002", "babbage-002", "gpt-3.5-turbo-1106"],
-        help="The model ID to be used as specified by the OPEN AI API documentation: https://platform.openai.com/docs/models. Supported models are 'davinci-002' and 'baggage'.",
+        help="The ID of the judge LLM, as specified by the OPEN AI API documentation: https://platform.openai.com/docs/models. Supported models are 'davinci-002' and 'baggage'.",
     )
     parser.add_argument(
         "context_window",
