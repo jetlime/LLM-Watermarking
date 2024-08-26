@@ -25,7 +25,7 @@ echo GPT_API_KEY="<OPENAI_API_KEY>" > .env
 3. Execute the program by defining the Text file you wish to evaluate and the model for which you want to compare the token selection distribution
 
 ```bash
-python prototype.py ./data/human-input-small.txt "davinci-002"
+python prototype.py ./data/human_input-small.txt "davinci-002" 10
 ```
 
 ## Examples
