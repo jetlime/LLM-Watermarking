@@ -97,8 +97,8 @@ def parse_args():
         "model_id",
         metavar="open_ai_model_id",
         type=str,
-        choices=["davinci-002", "babbage-002", "gpt-3.5-turbo-1106"],
-        help="The ID of the judge LLM, as specified by the OPEN AI API documentation: https://platform.openai.com/docs/models. Supported models are 'davinci-002' and 'baggage'.",
+        choices=["davinci-002", "babbage-002", "gpt-4o", "gpt-3.5-turbo-1106"],
+        help="The ID of the judge LLM, as specified by the OPEN AI API documentation: https://platform.openai.com/docs/models. Supported models are 'davinci-002', 'babbage-002' 'gpt-4o' and 'gpt-3.5-turbo-1106'.",
     )
     parser.add_argument(
         "context_window",

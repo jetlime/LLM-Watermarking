@@ -35,7 +35,7 @@ positional arguments:
   input_file_name   Path to the input text file.
   open_ai_model_id  The ID of the judge LLM, as specified by the OPEN AI API documentation:
                     https://platform.openai.com/docs/models. Supported models are
-                    'davinci-002' and 'baggage'.
+                    'davinci-002', 'babbage-002' and 'gpt-3.5-turbo-1106'.
   context_window    The context window size (an integer). Defaults to 10.
   frequency_bins    The number of bins to consider in the frequency distribution. Defaults to
                     20.
@@ -49,6 +49,8 @@ options:
 Based on the use of different Judge LLMs.
 
 ### Using ```davinci-002```
+
+We select 5 freqency bins as it corresponds to the size of the log probability rankings obtain by the Open AI API for the davinci-002 model.
 
 Short human-generated text (```./data/human-input-small.txt```):
 
@@ -68,6 +70,8 @@ Short human-generated text (```./data/human-input-small.txt```):
 
 ### Using ```gpt3.5-turbo-1106```
 
+We select 20 freqency bins as it corresponds to the size of the log probability rankings obtain by the Open AI API for the gpt3.5 model.
+
 Short human-generated text (```./data/human-input-small.txt```):
 
 ![](results_gpt-3.5-turbo-1106/plot_human_input-small.png)
@@ -83,6 +87,15 @@ Short human-generated text (```./data/human-input-small.txt```):
 - Davinci-002 generated text ( ```./data/davinci-002-input.txt```):
 
 ![](results_gpt-3.5-turbo-1106/plot_davinci-002_input.png)
+
+### Using ```gpt4o```
+
+We select 20 freqency bins as it corresponds to the size of the log probability rankings obtain by the Open AI API for the gpt-4o model.
+
+- GPT-4o generated text ( ```./data/gpt4o-input.txt```):
+
+![](results_gpt-4o/plot_gpt4o_input.png)
+
 
 ## Cost Analysis
 

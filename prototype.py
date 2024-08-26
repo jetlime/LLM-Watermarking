@@ -36,7 +36,7 @@ def main():
 
     # We only consider a probability distributions corresponding to the number of
     # specified Frequency Bins, and we include a bin in case the token is not found
-    word_selection_distribution = [0] * config.frequency_bins
+    word_selection_distribution = [0] * (config.frequency_bins + 1)
 
     # For all tokens in the document
     for i in tqdm(range(1, len(raw_tokens))):
@@ -53,7 +53,7 @@ def main():
         # Prompt changes based on Judge Model type (foundational or chat finetuned)
         if config.model_id in ["davinci-002", "babbage-002"]:
             next_word_log_probs = send_prompt_completion(client, config, input_prompt)
-        elif config.model_id in ["gpt-3.5-turbo-1106"]:
+        elif config.model_id in ["gpt-3.5-turbo-1106", "gpt-4o"]:
             next_word_log_probs = send_prompt_chat_completion(
                 client, config, input_prompt
             )
